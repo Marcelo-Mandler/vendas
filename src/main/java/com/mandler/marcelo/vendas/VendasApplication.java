@@ -15,33 +15,17 @@ public class VendasApplication {
 	@Bean
 	public CommandLineRunner init(@Autowired ClientesRepository clientes){
 		return args -> {
-			clientes.salvarCliente( new Cliente("Marcelo"));
-			clientes.salvarCliente(new Cliente("Paula"));
+			clientes.save( new Cliente("Marcelo"));
+			clientes.save(new Cliente("Paula"));
 
-			List<Cliente> todosClintes = clientes.obterClientes();
+			List<Cliente> todosClintes = clientes.findAll();
 			todosClintes.forEach(System.out::println);
 
-			todosClintes.forEach(cliente -> {
-				cliente.setNome(cliente.getNome() + " atualizado");
-				clientes.atualizarCliente(cliente);
-			});
+            boolean existe = clientes.existsByNome("Paula");
+            boolean existe1 = clientes.existsByNome("Fulano");
 
-			clientes.buscarPorNome("elo").forEach(System.out::println);
-
-			todosClintes = clientes.obterClientes();
-			todosClintes.forEach(System.out::println);
-
-			System.out.println("Deletando clientes");
-			clientes.obterClientes().forEach(c -> {
-				clientes.deletarCliente(c);
-			});
-
-			todosClintes =clientes.obterClientes();
-			if(todosClintes.isEmpty()) {
-				System.out.println("Nenhum clliente encontrado");
-			} else {
-				todosClintes.forEach(System.out::println);
-			}
+            System.out.println("Existe algum cliente com nome Paula? " + existe);
+            System.out.println("Existe algum cliente com nome Fulano? " + existe1);
 		};
 	}
 	public static void main(String[] args) {
