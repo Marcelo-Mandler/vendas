@@ -5,13 +5,12 @@ import com.mandler.marcelo.vendas.domain.repository.ClientesRepository;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import static org.springframework.http.HttpStatus.*;
+
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/clientes")
@@ -21,6 +20,16 @@ public class ClienteController {
 
     public ClienteController(ClientesRepository clientesRepository) {
         this.clientesRepository = clientesRepository;
+    }
+
+    @GetMapping
+    public List<Cliente> filterOrGetAllClient(Cliente filterOrGet) {
+        ExampleMatcher matcher = ExampleMatcher
+                .matching()
+                .withIgnoreCase()
+                .withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING);
+        Example example = Example.of(filterOrGet, matcher);
+        return clientesRepository.findAll(example);
     }
 
     @GetMapping("/{id}")
@@ -33,45 +42,35 @@ public class ClienteController {
     }
 
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public Cliente saveClient(@RequestBody Cliente cliente) {
-        return clientesRepository.save(cliente);
+    @ResponseStatus(CREATED)
+    public Cliente saveClient(@RequestBody Cliente client) {
+        return clientesRepository.save(client);
     }
 
     @PutMapping("/{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void updateClient(@PathVariable Integer id, @RequestBody Cliente cliente) {
+    @ResponseStatus(NO_CONTENT)
+    public void updateClient(@PathVariable Integer id, @RequestBody Cliente client) {
         clientesRepository
                 .findById(id)
                 .map(clientIsPresent -> {
-                    cliente.setId(clientIsPresent.getId());
-                    clientesRepository.save(cliente);
+                    client.setId(clientIsPresent.getId());
+                    clientesRepository.save(client);
                     return clientIsPresent;
                 }).orElseThrow(() ->
-                        new ResponseStatusException(HttpStatus.NOT_FOUND,
+                        new ResponseStatusException(NOT_FOUND,
                                 "Cliente não encontrado."));
     }
 
     @DeleteMapping("/{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @ResponseStatus(NO_CONTENT)
     public void deleteClient(@PathVariable Integer id) {
         clientesRepository.findById(id)
-                .map(cliente -> {
-                    clientesRepository.delete(cliente);
-                    return cliente;
+                .map(client -> {
+                    clientesRepository.delete(client);
+                    return client;
                 })
                 .orElseThrow(() ->
-                        new ResponseStatusException(HttpStatus.NOT_FOUND,
+                        new ResponseStatusException(NOT_FOUND,
                                 "Cliente não encontrado."));
-    }
-
-    @GetMapping
-    public List<Cliente> find(Cliente filter) {
-        ExampleMatcher matcher = ExampleMatcher
-                .matching()
-                .withIgnoreCase()
-                .withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING);
-        Example example = Example.of(filter, matcher);
-        return clientesRepository.findAll(example);
     }
 }
