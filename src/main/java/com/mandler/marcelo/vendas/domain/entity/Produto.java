@@ -1,10 +1,15 @@
 package com.mandler.marcelo.vendas.domain.entity;
 
+import lombok.*;
+
 import javax.persistence.*;
 import java.math.BigDecimal;
 
 @Entity
 @Table(name = "produto")
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class Produto {
 
     @Id
@@ -15,38 +20,5 @@ public class Produto {
     private String descricao;
 
     @Column(name = "preco_unitario")
-    private BigDecimal precoUnitatio;
-
-    public Produto() {
-    }
-
-    public Produto(Integer id, String descricao, BigDecimal precoUnitatio) {
-        this.id = id;
-        this.descricao = descricao;
-        this.precoUnitatio = precoUnitatio;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getDescricao() {
-        return descricao;
-    }
-
-    public void setDescricao(String descricao) {
-        this.descricao = descricao;
-    }
-
-    public BigDecimal getPrecoUnitatio() {
-        return precoUnitatio;
-    }
-
-    public void setPrecoUnitatio(BigDecimal precoUnitatio) {
-        this.precoUnitatio = precoUnitatio;
-    }
+    private BigDecimal preco;
 }

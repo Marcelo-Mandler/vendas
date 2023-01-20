@@ -1,12 +1,19 @@
 package com.mandler.marcelo.vendas.domain.entity;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.Set;
+import java.util.List;
 
 @Entity
 @Table(name = "pedido")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Pedido {
 
     @Id
@@ -22,56 +29,9 @@ public class Pedido {
     private LocalDate dataPedido;
 
     @Column(name = "total", precision = 20, scale = 2)
-    private BigDecimal totalPedido;
+    private BigDecimal total;
     @OneToMany (mappedBy = "pedido")
-    private Set<ItemPedido> itensPedidos;
+    private List<ItemPedido> itens;
 
-    public Set<ItemPedido> getItensPedidos() {
-        return itensPedidos;
-    }
 
-    public void setItensPedidos(Set<ItemPedido> itensPedidos) {
-        this.itensPedidos = itensPedidos;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public Cliente getCliente() {
-        return cliente;
-    }
-
-    public void setCliente(Cliente cliente) {
-        this.cliente = cliente;
-    }
-
-    public LocalDate getDataPedido() {
-        return dataPedido;
-    }
-
-    public void setDataPedido(LocalDate dataPedido) {
-        this.dataPedido = dataPedido;
-    }
-
-    public BigDecimal getTotalPedido() {
-        return totalPedido;
-    }
-
-    public void setTotalPedido(BigDecimal totalPedido) {
-        this.totalPedido = totalPedido;
-    }
-
-    @Override
-    public String toString() {
-        return "Pedido{" +
-                "id=" + id +
-                ", dataPedido=" + dataPedido +
-                ", totalPedido=" + totalPedido +
-                '}';
-    }
 }

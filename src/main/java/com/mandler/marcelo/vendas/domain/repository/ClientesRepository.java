@@ -2,7 +2,6 @@ package com.mandler.marcelo.vendas.domain.repository;
 
 import com.mandler.marcelo.vendas.domain.entity.Cliente;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
