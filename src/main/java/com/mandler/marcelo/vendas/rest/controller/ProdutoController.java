@@ -17,12 +17,12 @@ public class ProdutoController {
 
     private ProdutoRepository produtoRepository;
 
-    public  ProdutoController (ProdutoRepository produtoRepository) {
+    public ProdutoController(ProdutoRepository produtoRepository) {
         this.produtoRepository = produtoRepository;
     }
 
     @GetMapping
-    public List<Produto> filterOrGetAllProducts( Produto filterOrGet) {
+    public List<Produto> filterOrGetAllProducts(Produto filterOrGet) {
         ExampleMatcher matcher = ExampleMatcher
                 .matching()
                 .withIgnoreCase()
@@ -41,18 +41,18 @@ public class ProdutoController {
 
     @PostMapping
     @ResponseStatus(CREATED)
-    public Produto saveProduct(@RequestBody Produto product) {
-        return produtoRepository.save(product);
+    public Produto saveProduct(@RequestBody Produto produto) {
+        return produtoRepository.save(produto);
     }
 
     @PutMapping("/{id}")
     @ResponseStatus(NO_CONTENT)
-    public void updateProduct(@PathVariable Integer id, @RequestBody Produto product) {
+    public void updateProduct(@PathVariable Integer id, @RequestBody Produto produto) {
         produtoRepository
                 .findById(id)
                 .map(productIsPresent -> {
-                    product.setId(productIsPresent.getId());
-                    produtoRepository.save(product);
+                    produto.setId(productIsPresent.getId());
+                    produtoRepository.save(produto);
                     return productIsPresent;
                 }).orElseThrow(() ->
                         new ResponseStatusException(NOT_FOUND,
@@ -63,8 +63,8 @@ public class ProdutoController {
     @ResponseStatus(NO_CONTENT)
     public void deleteProduct (@PathVariable Integer id) {
         produtoRepository.findById(id)
-                .map(product -> {
-                    produtoRepository.delete(product);
+                .map(produto -> {
+                    produtoRepository.delete(produto);
                     return Void.TYPE;
                 }).orElseThrow(() ->
                         new ResponseStatusException(NOT_FOUND,

@@ -20,5 +20,5 @@ public class Produto {
     private String descricao;
 
     @Column(name = "preco_unitario")
-    private BigDecimal precoUnitatio;
+    private BigDecimal preco;
 }

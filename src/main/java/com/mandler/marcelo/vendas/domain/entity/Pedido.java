@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.Set;
+import java.util.List;
 
 @Entity
 @Table(name = "pedido")
@@ -29,9 +29,9 @@ public class Pedido {
     private LocalDate dataPedido;
 
     @Column(name = "total", precision = 20, scale = 2)
-    private BigDecimal totalPedido;
+    private BigDecimal total;
     @OneToMany (mappedBy = "pedido")
-    private Set<ItemPedido> itensPedidos;
+    private List<ItemPedido> itens;
 
 
 }
