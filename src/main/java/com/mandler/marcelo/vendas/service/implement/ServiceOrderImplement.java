@@ -4,11 +4,13 @@ import com.mandler.marcelo.vendas.domain.entity.Cliente;
 import com.mandler.marcelo.vendas.domain.entity.Pedido;
 import com.mandler.marcelo.vendas.domain.entity.ItemPedido;
 import com.mandler.marcelo.vendas.domain.entity.Produto;
+import com.mandler.marcelo.vendas.domain.enums.StatusPedido;
 import com.mandler.marcelo.vendas.domain.repository.ClientesRepository;
 import com.mandler.marcelo.vendas.domain.repository.ItemsPedidosRepository;
 import com.mandler.marcelo.vendas.domain.repository.PedidoRepository;
 import com.mandler.marcelo.vendas.domain.repository.ProdutoRepository;
 import com.mandler.marcelo.vendas.exception.BusinessRulesException;
+import com.mandler.marcelo.vendas.exception.NotFoundOrderException;
 import com.mandler.marcelo.vendas.rest.dto.PedidoDTO;
 import com.mandler.marcelo.vendas.rest.dto.ItemPedidoDTO;
 import com.mandler.marcelo.vendas.service.PedidoService;
@@ -41,6 +43,7 @@ public class ServiceOrderImplement implements PedidoService {
         order.setTotal(dto.getTotal());
         order.setDataPedido(LocalDate.now());
         order.setCliente(clientDTO);
+        order.setStatus(StatusPedido.REALIZADO);
 
         List<ItemPedido> orderItemList =  convertItemsInOrderItems(order, dto.getItens());
         pedidoRepository.save(order);
@@ -52,6 +55,15 @@ public class ServiceOrderImplement implements PedidoService {
     @Override
     public Optional<Pedido> getCompletOrder(Integer id) {
         return pedidoRepository.findByIdFetchItens(id);
+    }
+
+    @Override
+    @Transactional
+    public void updateStatus(Integer id, StatusPedido statusPedido) {
+        pedidoRepository.findById(id). map(pedido -> {
+            pedido.setStatus(statusPedido);
+            return pedidoRepository.save(pedido);
+        }).orElseThrow(NotFoundOrderException::new);
     }
 
     private List<ItemPedido> convertItemsInOrderItems(Pedido pedido, List<ItemPedidoDTO> items) {
