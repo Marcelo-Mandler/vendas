@@ -8,6 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.validation.Valid;
+
 import static org.springframework.http.HttpStatus.*;
 
 import java.util.List;
@@ -43,13 +45,13 @@ public class ClienteController {
 
     @PostMapping
     @ResponseStatus(CREATED)
-    public Cliente saveClient(@RequestBody Cliente client) {
+    public Cliente saveClient(@RequestBody @Valid Cliente client) {
         return clientesRepository.save(client);
     }
 
     @PutMapping("/{id}")
     @ResponseStatus(NO_CONTENT)
-    public void updateClient(@PathVariable Integer id, @RequestBody Cliente client) {
+    public void updateClient(@PathVariable Integer id, @RequestBody @Valid Cliente client) {
         clientesRepository
                 .findById(id)
                 .map(clientIsPresent -> {
